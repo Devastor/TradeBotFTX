@@ -4,8 +4,8 @@ from selenium.webdriver.common.by import By                                     
 import time as DevastorTime                                                                                     # import:  time library for sleep function
 import os                                                                                                       # import:  system library
 from ftx import FtxClient                                                                                       # import:  ftx client library
-api_key = ''                                                                                                    # API public key
-api_secret = ''                                                                                                 # API secret ley
+api_key = '9VWWRq2qHa34jO0Gc7QNm1c6_WBRTSl7K-KEwbS2'                                                            # API public key
+api_secret = 'G18attHNR5YEN3GNixkckHastgZBlm96m7bb4zdK'                                                         # API secret ley
 client = FtxClient(api_key=api_key, api_secret=api_secret)                                                      # FTX client variable
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))                                                       # root path variable
 DRIVER_BIN = os.path.join(PROJECT_ROOT, "chromedriver")                                                         # webdriver emulator lolation
@@ -23,14 +23,21 @@ nowTime = datetime.datetime.now()                                               
 oldTime = -1                                                                                                    # previous time variable
 markets = client.get_markets()                                                                                  # get markets info
 priceStep = 0                                                                                                   # reset price step to zero
+startBalance = client.get_account_info()['totalAccountValue']
+profit = 0
+hourCounter = 0
 for market in markets:                                                                                          # cycle by all markets
     if market['name'] == 'FTT/USDT':                                                                            # if found needed market
-        priceStep = market['priceStep']                                                                         # set price step value
+        priceStep = market['priceIncrement']                                                                    # set price step value
 while True:                                                                                                     # infinite main loop
     nowTime = datetime.datetime.now().hour                                                                      # update current time
     if oldTime != nowTime:                                                                                      # if hour has passed
         oldTime = nowTime                                                                                       # update old time var
         devastorSignal = 'HOLD'                                                                                 # reset signal to 'HOLD'
+        balance = client.get_account_info()['totalAccountValue']                                                # get avaliable balance
+        profit = float(startBalance) - float(balance)
+        if profit != 0 and hourCounter > 0:
+            print('PROFIT:', profit, 'USDT |', str(int((profit / startBalance) * 100)), '% |', '(per month:', str(int(((profit / startBalance) * 100)/hourCounter) * 720), '% )')
         try:                                                                                                    # try block for html page get check
             devastorBrowser.get('https://ru.tradingview.com/symbols/' + symbol.replace('/', '') + '/technicals')# get trading view stats page
             DevastorTime.sleep(3)                                                                               # pause for page load
@@ -41,23 +48,27 @@ while True:                                                                     
             devastorBrowser.quit()                                                                              # close browser for memory safe
         except:
             devastorSignal = 'HOLD'                                                                             # reset signal to 'HOLD'
+        print('SIGNAL:', devastorSignal)
         if devastorSignal == 'BUY' and lastSignal != 'BUY':                                                     # if we get 'BUY' signal after another one
             try:                                                                                                # try placing buy order
-                balance = client.get_account_info()['totalAccountValue']                                        # get avaliable balance
                 actual_price = client.get_market(symbol)['price']                                               # get current price
                 quantity = ((float(balance) / float(actual_price)) // priceStep) *  priceStep                   # calculate quantity
                 client.place_order(symbol, 'buy', actual_price, quantity)                                       # place order to by max amount
                 lastSignal = 'BUY'                                                                              # set last signal to 'BUY
+                print('ACTION: BUY\n', 'CURR:', CURR1, '\nPRICE:', actual_price)
             except:
                 pass
         if devastorSignal == 'SELL' and lastSignal != 'SELL':                                                   # if we get 'SELL' signal after another one
             try:                                                                                                # try placing sell order
                 balances = client.get_balances()                                                                # get balances of all curr
                 curr1_balance = 0                                                                               # reset trade currency balance to zero
-                for balance in balances:                                                                        # cycle by all balances
-                    if balance['coin'] == CURR1: curr1_balance = float(balance['total'])                        # if found needed curr, set trade curr balance value
+                for bal in balances:                                                                            # cycle by all balances
+                    if bal['coin'] == CURR1: curr1_balance = float(bal['total'])                                # if found needed curr, set trade curr balance value
                 actual_price = client.get_market(symbol)['price']                                               # get actual ticker price
                 client.place_order(symbol, 'sell', actual_price, (curr1_balance // priceStep) * priceStep)      # place sell order for all curr1
                 lastSignal = 'SELL'                                                                             # reset last signal
+                print('ACTION: SELL\n', 'CURR:', CURR1, '\nPRICE:', actual_price)
             except:
                 pass
+
+        hourCounter += 1
