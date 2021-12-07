@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By                                     
 import time as DevastorTime                                                                                     # import:  time library for sleep function
 import os                                                                                                       # import:  system library
 from ftx import FtxClient                                                                                       # import:  ftx client library
+
 api_key = '9VWWRq2qHa34jO0Gc7QNm1c6_WBRTSl7K-KEwbS2'                                                            # API public key
 api_secret = 'G18attHNR5YEN3GNixkckHastgZBlm96m7bb4zdK'                                                         # API secret ley
 client = FtxClient(api_key=api_key, api_secret=api_secret)                                                      # FTX client variable
@@ -45,7 +46,6 @@ while True:                                                                     
             predict_STAT = devastorBrowser.find_element(By.XPATH, predict_element_address).text.upper()         # get prediction word
             if predict_STAT == 'ПРОДАВАТЬ' or predict_STAT == 'АКТИВНО ПРОДАВАТЬ': devastorSignal = 'SELL'      # set signal to sell
             if predict_STAT == 'ПОКУПАТЬ' or predict_STAT == 'АКТИВНО ПОКУПАТЬ': devastorSignal = 'BUY'         # set signal to buy
-            devastorBrowser.quit()                                                                              # close browser for memory safe
         except:
             devastorSignal = 'HOLD'                                                                             # reset signal to 'HOLD'
         print('SIGNAL:', devastorSignal)
