@@ -4,10 +4,12 @@ from selenium.webdriver.common.by import By                                     
 import time as DevastorTime                                                                                     # import:  time library for sleep function
 import os                                                                                                       # import:  system library
 from ftx import FtxClient                                                                                       # import:  ftx client library
-
-api_key = '9VWWRq2qHa34jO0Gc7QNm1c6_WBRTSl7K-KEwbS2'                                                            # API public key
-api_secret = 'G18attHNR5YEN3GNixkckHastgZBlm96m7bb4zdK'                                                         # API secret ley
-client = FtxClient(api_key=api_key, api_secret=api_secret)                                                      # FTX client variable
+text_file = open('data_FTX.txt', "r")                                                                           # open data file to red API-keys
+lines = text_file.readlines()                                                                                   # read lines from file
+API = lines[0].strip()                                                                                          # API public key
+SECRET = lines[1].strip()                                                                                       # API secret key
+text_file.close()                                                                                               # close text file
+client = FtxClient(api_key=API, api_secret=SECRET)                                                              # FTX client variable
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))                                                       # root path variable
 DRIVER_BIN = os.path.join(PROJECT_ROOT, "chromedriver")                                                         # webdriver emulator lolation
 devastorOptions = DevastorWebDriver.ChromeOptions()                                                             # webdriver options init
@@ -24,9 +26,9 @@ nowTime = datetime.datetime.now()                                               
 oldTime = -1                                                                                                    # previous time variable
 markets = client.get_markets()                                                                                  # get markets info
 priceStep = 0                                                                                                   # reset price step to zero
-startBalance = client.get_account_info()['totalAccountValue']
-profit = 0
-hourCounter = 0
+startBalance = client.get_account_info()['totalAccountValue']                                                   # set start balance
+profit = 0                                                                                                      # set null start profit
+hourCounter = 0                                                                                                 # just another hour counter
 for market in markets:                                                                                          # cycle by all markets
     if market['name'] == 'FTT/USDT':                                                                            # if found needed market
         priceStep = market['priceIncrement']                                                                    # set price step value
