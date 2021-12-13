@@ -72,5 +72,4 @@ while True:                                                                     
                 print('ACTION: SELL\n', 'CURR:', CURR1, '\nPRICE:', actual_price)
             except:
                 pass
-
         hourCounter += 1
