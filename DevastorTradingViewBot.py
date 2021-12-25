@@ -5,16 +5,22 @@ import time as DevastorTime                                                     
 import os                                                                                                       # import:  system library
 from ftx import FtxClient                                                                                       # import:  ftx client library
 <<<<<<< HEAD
+<<<<<<< HEAD
 api_key = '9VWWRq2qHa34jO0Gc7QNm1c6_WBRTSl7K-KEwbS2'                                                            # API public key
 api_secret = 'G18attHNR5YEN3GNixkckHastgZBlm96m7bb4zdK'                                                         # API secret ley
 client = FtxClient(api_key=api_key, api_secret=api_secret)                                                      # FTX client variable
 =======
+=======
+>>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
 text_file = open('data_FTX.txt', "r")                                                                           # open data file to red API-keys
 lines = text_file.readlines()                                                                                   # read lines from file
 API = lines[0].strip()                                                                                          # API public key
 SECRET = lines[1].strip()                                                                                       # API secret key
 text_file.close()                                                                                               # close text file
 client = FtxClient(api_key=API, api_secret=SECRET)                                                              # FTX client variable
+<<<<<<< HEAD
+>>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
+=======
 >>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))                                                       # root path variable
 DRIVER_BIN = os.path.join(PROJECT_ROOT, "chromedriver")                                                         # webdriver emulator lolation
@@ -23,10 +29,15 @@ devastorOptions.add_argument('--headless')                                      
 devastorOptions.add_argument("--disable-dev-shm-usage")                                                         # overcome limited resource problems
 devastorOptions.add_argument("--no-sandbox")                                                                    # bypass OS security model
 <<<<<<< HEAD
+<<<<<<< HEAD
 devastorOptions.add_argument("--window-size=1920,1080")
 devastorOptions.add_argument("--start-maximized")
 devastorBrowser = DevastorWebDriver.Chrome(options=devastorOptions, executable_path=DRIVER_BIN)                 # webdriver emulator variable
 devastorBrowser.implicitly_wait(1)                                                                              # webdriver wait interval
+=======
+devastorBrowser = DevastorWebDriver.Chrome(options=devastorOptions, executable_path=DRIVER_BIN)                 # webdriver emulator variable
+devastorBrowser.implicitly_wait(0)                                                                              # webdriver wait interval
+>>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
 =======
 devastorBrowser = DevastorWebDriver.Chrome(options=devastorOptions, executable_path=DRIVER_BIN)                 # webdriver emulator variable
 devastorBrowser.implicitly_wait(0)                                                                              # webdriver wait interval
@@ -39,6 +50,7 @@ nowTime = datetime.datetime.now()                                               
 oldTime = -1                                                                                                    # previous time variable
 markets = client.get_markets()                                                                                  # get markets info
 priceStep = 0                                                                                                   # reset price step to zero
+<<<<<<< HEAD
 <<<<<<< HEAD
 startBalance = client.get_account_info()['totalAccountValue']                                                   # start balance value
 profit = 0                                                                                                      # profit value
@@ -68,6 +80,11 @@ startBalance = client.get_account_info()['totalAccountValue']                   
 profit = 0                                                                                                      # set null start profit
 hourCounter = 0                                                                                                 # just another hour counter
 >>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
+=======
+startBalance = client.get_account_info()['totalAccountValue']                                                   # set start balance
+profit = 0                                                                                                      # set null start profit
+hourCounter = 0                                                                                                 # just another hour counter
+>>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
 for market in markets:                                                                                          # cycle by all markets
     if market['name'] == 'FTT/USDT':                                                                            # if found needed market
         priceStep = market['priceIncrement']                                                                    # set price step value
@@ -80,6 +97,7 @@ while True:                                                                     
         profit = float(startBalance) - float(balance)
         if profit != 0 and hourCounter > 0:
             print('PROFIT:', profit, 'USDT |', str(int((profit / startBalance) * 100)), '% |', '(per month:', str(int(((profit / startBalance) * 100)/hourCounter) * 720), '% )')
+<<<<<<< HEAD
 <<<<<<< HEAD
         predict_STAT = '-'
         try:                                                                                                    # try block for html page get check
@@ -100,6 +118,8 @@ while True:                                                                     
             devastorSignal = 'HOLD'                                                                             # reset signal to 'HOLD'
         print('SIGNAL:', devastorSignal, predict_STAT)
 =======
+=======
+>>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
         try:                                                                                                    # try block for html page get check
             devastorBrowser.get('https://ru.tradingview.com/symbols/' + symbol.replace('/', '') + '/technicals')# get trading view stats page
             DevastorTime.sleep(3)                                                                               # pause for page load
@@ -110,6 +130,9 @@ while True:                                                                     
         except:
             devastorSignal = 'HOLD'                                                                             # reset signal to 'HOLD'
         print('SIGNAL:', devastorSignal)
+<<<<<<< HEAD
+>>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
+=======
 >>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
         if devastorSignal == 'BUY' and lastSignal != 'BUY':                                                     # if we get 'BUY' signal after another one
             try:                                                                                                # try placing buy order
@@ -119,8 +142,13 @@ while True:                                                                     
                 lastSignal = 'BUY'                                                                              # set last signal to 'BUY
                 print('ACTION: BUY\n', 'CURR:', CURR1, '\nPRICE:', actual_price)
 <<<<<<< HEAD
+<<<<<<< HEAD
             except Exception as e:
                 print('BUY ERR:', e)
+=======
+            except:
+                pass
+>>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
 =======
             except:
                 pass
@@ -136,8 +164,14 @@ while True:                                                                     
                 lastSignal = 'SELL'                                                                             # reset last signal
                 print('ACTION: SELL\n', 'CURR:', CURR1, '\nPRICE:', actual_price)
 <<<<<<< HEAD
+<<<<<<< HEAD
             except Exception as e:
                 print('SELL ERR:', e)
+=======
+            except:
+                pass
+
+>>>>>>> parent of 838b615 (Delete DevastorTradingViewBot.py)
 =======
             except:
                 pass
