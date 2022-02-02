@@ -53,14 +53,14 @@ def recreateDriver():
                                                executable_path=DRIVER_BIN)  # webdriver emulator variable
     devastorBrowser.implicitly_wait(1)
 for market in markets:                                                                                          # cycle by all markets
-    if market['name'] == 'FTT/USDT':                                                                            # if found needed market
+    if market['name'] == CURR1 + '/' + CURR2:                                                                            # if found needed market
         priceStep = market['priceIncrement']                                                                    # set price step value
         print('priceStep:', priceStep)
 while True:                                                                                                     # infinite main loop
     nowTime = datetime.datetime.now().hour                                                                      # update current time
     if oldTime != nowTime:                                                                                      # if hour has passed
         try:
-            client.cancel_orders()
+            client.cancel_orders(CURR1 + '/' + CURR2)
         except:
             pass
         oldTime = nowTime                                                                                       # update old time var
