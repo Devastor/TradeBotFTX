@@ -28,6 +28,7 @@ nowTime = datetime.datetime.now()                                               
 oldTime = -1                                                                                                    # previous time variable
 markets = client.get_markets()                                                                                  # get markets info
 priceStep = 0                                                                                                   # reset price step to zero
+order_size = 0.95                                                                                               # percent of balance to trade
 startBalance = client.get_account_info()['totalAccountValue']                                                   # start balance value
 profit = 0                                                                                                      # profit value
 hourCounter = 0                                                                                                 # counter of passed hours
@@ -54,12 +55,18 @@ def recreateDriver():
 for market in markets:                                                                                          # cycle by all markets
     if market['name'] == 'FTT/USDT':                                                                            # if found needed market
         priceStep = market['priceIncrement']                                                                    # set price step value
+        print('priceStep:', priceStep)
 while True:                                                                                                     # infinite main loop
     nowTime = datetime.datetime.now().hour                                                                      # update current time
     if oldTime != nowTime:                                                                                      # if hour has passed
+        try:
+            client.cancel_orders()
+        except:
+            pass
         oldTime = nowTime                                                                                       # update old time var
         devastorSignal = 'HOLD'                                                                                 # reset signal to 'HOLD'
         balance = client.get_account_info()['totalAccountValue']                                                # get avaliable balance
+        print('balance:', balance)
         profit = float(startBalance) - float(balance)
         if profit != 0 and hourCounter > 0:
             print('PROFIT:', profit, 'USDT |', str(int((profit / startBalance) * 100)), '% |', '(per month:', str(int(((profit / startBalance) * 100)/hourCounter) * 720), '% )')
@@ -83,8 +90,11 @@ while True:                                                                     
         print('SIGNAL:', devastorSignal, predict_STAT)
         if devastorSignal == 'BUY' and lastSignal != 'BUY':                                                     # if we get 'BUY' signal after another one
             try:                                                                                                # try placing buy order
+                balance = client.get_account_info()['totalAccountValue']                                        # get avaliable balance
                 actual_price = client.get_market(symbol)['price']                                               # get current price
-                quantity = ((float(balance) / float(actual_price)) // priceStep) *  priceStep                   # calculate quantity
+                print('actual_price:', actual_price)
+                quantity = ((float(balance) / float(actual_price)) // priceStep) * priceStep * order_size       # calculate quantity
+                print('quantity:', quantity)
                 client.place_order(symbol, 'buy', actual_price, quantity)                                       # place order to by max amount
                 lastSignal = 'BUY'                                                                              # set last signal to 'BUY
                 print('ACTION: BUY\n', 'CURR:', CURR1, '\nPRICE:', actual_price)
