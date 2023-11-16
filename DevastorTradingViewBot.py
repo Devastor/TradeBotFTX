@@ -41,16 +41,16 @@ def recreateDriver():
             devastorBrowser.close()
         except:
             pass
-    PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))  # root path variable
-    DRIVER_BIN = os.path.join(PROJECT_ROOT, "chromedriver")  # webdriver emulator lolation
-    devastorOptions = DevastorWebDriver.ChromeOptions()  # webdriver options init
-    devastorOptions.add_argument('--headless')  # headless mod enable
-    devastorOptions.add_argument("--disable-dev-shm-usage")  # overcome limited resource problems
-    devastorOptions.add_argument("--no-sandbox")  # bypass OS security model
+    PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))                                                   # root path variable
+    DRIVER_BIN = os.path.join(PROJECT_ROOT, "chromedriver")                                                     # webdriver emulator lolation
+    devastorOptions = DevastorWebDriver.ChromeOptions()                                                         # webdriver options init
+    devastorOptions.add_argument('--headless')                                                                  # headless mod enable
+    devastorOptions.add_argument("--disable-dev-shm-usage")                                                     # overcome limited resource problems
+    devastorOptions.add_argument("--no-sandbox")                                                                # bypass OS security model
     devastorOptions.add_argument("--window-size=1920,1080")
     devastorOptions.add_argument("--start-maximized")
     devastorBrowser = DevastorWebDriver.Chrome(options=devastorOptions,
-                                               executable_path=DRIVER_BIN)  # webdriver emulator variable
+                                               executable_path=DRIVER_BIN)                                      # webdriver emulator variable
     devastorBrowser.implicitly_wait(1)
 for market in markets:                                                                                          # cycle by all markets
     if market['name'] == CURR1 + '/' + CURR2:                                                                            # if found needed market
